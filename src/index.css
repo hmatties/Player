@@ -1,0 +1,16 @@
+@font-face {
+  font-family: 'SFSymbols';
+  src: url('/fonts/SFSymbolsFallback.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #1E1E1E;
+}
