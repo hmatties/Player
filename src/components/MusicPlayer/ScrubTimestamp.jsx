@@ -5,6 +5,7 @@ import { formatTime } from '../../utils/formatTime'
 function DialDigit({ char, direction, clarity }) {
   const opacityFloor = clarity * 0.6
   const blurAmount = 3 * (1 - clarity * 0.85)
+  const duration = 0.26 - clarity * 0.18
 
   return (
     <span style={{
@@ -29,7 +30,7 @@ function DialDigit({ char, direction, clarity }) {
           initial="initial"
           animate="animate"
           exit="exit"
-          transition={{ duration: 0.18, ease: [0.25, 0.1, 0.25, 1] }}
+          transition={{ duration, ease: [0.25, 0.1, 0.25, 1] }}
           style={{
             position: 'absolute',
             top: 0,
