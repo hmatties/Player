@@ -51,14 +51,27 @@ function App() {
     setAnnotations(prev => prev.map(a => a.id === id ? { ...a, text } : a))
   }, [])
 
+  const handleAnnotationRemove = useCallback((id) => {
+    setAnnotations(prev => prev.filter(a => a.id !== id))
+  }, [])
+
   return (
-    <div className="app">
+    <div className="app" style={{
+      position: 'fixed',
+      inset: 0,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 12,
+    }}>
       <Cursor />
       <NotesEditor
         globalNote={globalNote}
         onGlobalNoteChange={setGlobalNote}
         annotations={annotations}
         onAnnotationTextChange={handleAnnotationTextChange}
+        onAnnotationRemove={handleAnnotationRemove}
         onPillClick={seek}
         focusedId={focusedId}
       />

@@ -1,7 +1,7 @@
 import { useRef } from 'react'
 import { AnnotationSection } from './AnnotationSection'
 
-export function NotesEditor({ globalNote, onGlobalNoteChange, annotations, onAnnotationTextChange, onPillClick, focusedId }) {
+export function NotesEditor({ globalNote, onGlobalNoteChange, annotations, onAnnotationTextChange, onAnnotationRemove, onPillClick, focusedId }) {
   const globalRef = useRef(null)
 
   const handleGlobalInput = (e) => {
@@ -12,23 +12,20 @@ export function NotesEditor({ globalNote, onGlobalNoteChange, annotations, onAnn
   }
 
   return (
-    // Outer: fixed frame with gradient mask
+    // Outer: fixed-height box with gradient mask
     <div style={{
-      position: 'fixed',
-      top: 96,
-      bottom: 0,
-      left: '50%',
-      transform: 'translateX(-50%)',
       width: 402,
-      maskImage: 'linear-gradient(to bottom, transparent, black 40px, black calc(100% - 280px), rgba(0,0,0,0.75) calc(100% - 200px), rgba(0,0,0,0.15) calc(100% - 140px), transparent calc(100% - 96px))',
-      WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 40px, black calc(100% - 280px), rgba(0,0,0,0.75) calc(100% - 200px), rgba(0,0,0,0.15) calc(100% - 140px), transparent calc(100% - 96px))',
+      height: 600,
+      flexShrink: 0,
+      maskImage: 'linear-gradient(to bottom, transparent, black 36px, black calc(100% - 56px), transparent)',
+      WebkitMaskImage: 'linear-gradient(to bottom, transparent, black 36px, black calc(100% - 56px), transparent)',
       overflow: 'hidden',
     }}>
       {/* Inner: scrollable content area */}
       <div style={{
         height: '100%',
         overflowY: 'auto',
-        padding: '40px 0 160px',
+        padding: '36px 0 56px',
         boxSizing: 'border-box',
         scrollbarWidth: 'none',
         msOverflowStyle: 'none',
@@ -51,7 +48,7 @@ export function NotesEditor({ globalNote, onGlobalNoteChange, annotations, onAnn
             fontSize: 17,
             fontWeight: 400,
             lineHeight: 1.55,
-            fontFamily: 'inherit',
+            fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif",
             padding: 0,
             margin: 0,
             caretColor: '#F0D900',
@@ -71,6 +68,7 @@ export function NotesEditor({ globalNote, onGlobalNoteChange, annotations, onAnn
             key={annotation.id}
             annotation={annotation}
             onTextChange={onAnnotationTextChange}
+            onRemove={onAnnotationRemove}
             onPillClick={onPillClick}
             autoFocus={annotation.id === focusedId}
           />

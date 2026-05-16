@@ -25,7 +25,7 @@ export function TimestampPill({ annotation, onPillClick }) {
         color: '#1a1a0a',
         fontSize: 13,
         fontWeight: 500,
-        fontVariantNumeric: 'tabular-nums',
+        fontFamily: "'JetBrains Mono', monospace",
         letterSpacing: '0.01em',
       }}>
         {label}

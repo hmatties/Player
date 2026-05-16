@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { TimestampPill } from './TimestampPill'
 
-export function AnnotationSection({ annotation, onTextChange, onPillClick, autoFocus }) {
+export function AnnotationSection({ annotation, onTextChange, onRemove, onPillClick, autoFocus }) {
   const textareaRef = useRef(null)
 
   useEffect(() => {
@@ -25,6 +25,7 @@ export function AnnotationSection({ annotation, onTextChange, onPillClick, autoF
         value={annotation.text}
         onChange={(e) => onTextChange(annotation.id, e.target.value)}
         onInput={handleInput}
+        onBlur={() => { if (!annotation.text.trim()) onRemove(annotation.id) }}
         rows={1}
         style={{
           display: 'block',
@@ -38,7 +39,7 @@ export function AnnotationSection({ annotation, onTextChange, onPillClick, autoF
           fontSize: 17,
           fontWeight: 400,
           lineHeight: 1.55,
-          fontFamily: 'inherit',
+          fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', sans-serif",
           padding: 0,
           margin: 0,
           caretColor: '#F0D900',

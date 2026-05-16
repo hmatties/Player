@@ -13,12 +13,10 @@ export function MusicPlayer({
 
   return (
     <div style={{
-      position: 'fixed',
-      bottom: 96,
-      left: '50%',
-      transform: 'translateX(-50%)',
       width: 402,
-      zIndex: 100,
+      flexShrink: 0,
+      position: 'relative',
+      zIndex: 2,
       overflow: 'visible',
     }}>
       <ScrubTimestamp
