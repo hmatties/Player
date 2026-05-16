@@ -56,10 +56,10 @@ export function Waveform({ currentTime, duration, isScrubbing, scrubTime, onScru
 
     for (let i = 0; i <= barsOnScreen; i++) {
       const barIdx = firstBar + i
-      const x = Math.round(i * BAR_STRIDE - subBarOffset)
+      if (barIdx < 0 || barIdx >= totalBars) continue
+      const x = i * BAR_STRIDE - subBarOffset
       if (x + BAR_W < 0 || x > canvasWidth) continue
-      const dataIdx = Math.max(0, Math.min(totalBars - 1, barIdx))
-      const amp = WAVEFORM_DATA[dataIdx]
+      const amp = WAVEFORM_DATA[barIdx]
       const h = amp * MAX_BAR_H
       if (h < 0.5) continue
       const played = barIdx < currentBarFrac
