@@ -18,6 +18,10 @@ export function Waveform({ currentTime, duration, isScrubbing, scrubTime, onScru
   const isActiveScrubRef = useRef(false)
   const scrubStartXRef = useRef(0)
   const scrubStartTimeRef = useRef(0)
+  const velPxRef = useRef(0)
+  const lastPointerXRef = useRef(0)
+  const lastPointerTRef = useRef(0)
+  const momentumRAFRef = useRef(null)
 
   useLayoutEffect(() => {
     const el = containerRef.current
@@ -75,34 +79,88 @@ export function Waveform({ currentTime, duration, isScrubbing, scrubTime, onScru
     drawWaveform(isScrubbing ? scrubTime : currentTime)
   }, [currentTime, scrubTime, isScrubbing, drawWaveform])
 
+  useEffect(() => {
+    return () => { if (momentumRAFRef.current) cancelAnimationFrame(momentumRAFRef.current) }
+  }, [])
+
+  const getVisibleDuration = useCallback(() => {
+    const barsOnScreen = Math.ceil(canvasWidth / BAR_STRIDE)
+    return (barsOnScreen / WAVEFORM_DATA.length) * duration
+  }, [canvasWidth, duration])
+
   const handlePointerDown = useCallback((e) => {
+    if (momentumRAFRef.current) {
+      cancelAnimationFrame(momentumRAFRef.current)
+      momentumRAFRef.current = null
+    }
     e.currentTarget.setPointerCapture(e.pointerId)
     isActiveScrubRef.current = true
     scrubStartXRef.current = e.clientX
     scrubStartTimeRef.current = currentTime
+    velPxRef.current = 0
+    lastPointerXRef.current = e.clientX
+    lastPointerTRef.current = performance.now()
     onScrubStart()
   }, [currentTime, onScrubStart])
 
   const handlePointerMove = useCallback((e) => {
     if (!isActiveScrubRef.current) return
+
+    const now = performance.now()
+    const dt = now - lastPointerTRef.current
+    if (dt > 0 && dt < 80) {
+      const inst = (e.clientX - lastPointerXRef.current) / dt
+      velPxRef.current = velPxRef.current * 0.6 + inst * 0.4
+    }
+    lastPointerXRef.current = e.clientX
+    lastPointerTRef.current = now
+
     const deltaX = e.clientX - scrubStartXRef.current
-    const totalBars = WAVEFORM_DATA.length
-    const barsOnScreen = Math.ceil(canvasWidth / BAR_STRIDE)
-    const visibleDuration = (barsOnScreen / totalBars) * duration
-    const newTime = scrubStartTimeRef.current - (deltaX / canvasWidth) * visibleDuration
+    const newTime = scrubStartTimeRef.current - (deltaX / canvasWidth) * getVisibleDuration()
     onScrubUpdate(newTime)
-  }, [canvasWidth, duration, onScrubUpdate])
+  }, [canvasWidth, getVisibleDuration, onScrubUpdate])
 
   const handlePointerUp = useCallback((e) => {
     if (!isActiveScrubRef.current) return
     isActiveScrubRef.current = false
+
     const deltaX = e.clientX - scrubStartXRef.current
-    const totalBars = WAVEFORM_DATA.length
-    const barsOnScreen = Math.ceil(canvasWidth / BAR_STRIDE)
-    const visibleDuration = (barsOnScreen / totalBars) * duration
-    const newTime = scrubStartTimeRef.current - (deltaX / canvasWidth) * visibleDuration
-    onScrubEnd(newTime)
-  }, [canvasWidth, duration, onScrubEnd])
+    const visibleDuration = getVisibleDuration()
+    let t = scrubStartTimeRef.current - (deltaX / canvasWidth) * visibleDuration
+    t = Math.max(0, Math.min(t, duration))
+
+    const releasePxVel = velPxRef.current  // px/ms
+    const secPerPx = visibleDuration / canvasWidth
+
+    if (Math.abs(releasePxVel) < 0.15) {
+      onScrubEnd(t)
+      return
+    }
+
+    // Convert to seconds/ms (dragging right = moving backward in time)
+    let vel = -releasePxVel * secPerPx
+    let lastTs = null
+
+    const momentumTick = (ts) => {
+      if (!lastTs) { lastTs = ts }
+      const dt = Math.min(ts - lastTs, 32)
+      lastTs = ts
+
+      vel *= Math.pow(0.78, dt / 16)
+      t = Math.max(0, Math.min(t + vel * dt, duration))
+
+      if (Math.abs(vel) < 0.00004 || t <= 0 || t >= duration) {
+        onScrubEnd(t)
+        momentumRAFRef.current = null
+        return
+      }
+
+      onScrubUpdate(t)
+      momentumRAFRef.current = requestAnimationFrame(momentumTick)
+    }
+
+    momentumRAFRef.current = requestAnimationFrame(momentumTick)
+  }, [canvasWidth, duration, getVisibleDuration, onScrubUpdate, onScrubEnd])
 
   const playheadPx = canvasWidth * PLAYHEAD_FRAC
 

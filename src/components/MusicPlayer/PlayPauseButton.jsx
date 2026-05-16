@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { PlayFillIcon, PauseIcon, ReplayIcon } from '../../assets/icons/SFSymbol'
+import albumArt from '../../assets/preview.jpg'
 
 export function PlayPauseButton({ isPlaying, isEnded, rotation, onToggle }) {
   return (
@@ -22,8 +23,9 @@ export function PlayPauseButton({ isPlaying, isEnded, rotation, onToggle }) {
           position: 'absolute',
           inset: 0,
           borderRadius: '50%',
-          background: 'linear-gradient(145deg, #6b7fa3 0%, #3d4f72 40%, #252d45 100%)',
-          boxShadow: 'inset 0 0 0 1px rgba(255,255,255,0.2)',
+          backgroundImage: `url(${albumArt})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
         }}
       />
       {/* Dark overlay + icon — does NOT rotate */}

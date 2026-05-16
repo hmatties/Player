@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { useMotionValue, useSpring } from 'framer-motion'
 
 const DURATION = 210  // 3:30
-const DEG_PER_SEC = 15
+const DEG_PER_SEC = 6
 
 export function usePlayerState() {
   const [isPlaying, setIsPlaying] = useState(false)
@@ -19,7 +19,7 @@ export function usePlayerState() {
   const scrubTimeRef = useRef(0)
 
   const rotationMV = useMotionValue(0)
-  const rotation = useSpring(rotationMV, { stiffness: 80, damping: 20 })
+  const rotation = useSpring(rotationMV, { stiffness: 400, damping: 40 })
 
   const tick = useCallback((timestamp) => {
     if (lastTimestampRef.current == null) {
