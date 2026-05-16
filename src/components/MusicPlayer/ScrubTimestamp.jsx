@@ -13,10 +13,10 @@ function DialDigit({ char, direction, clarity }) {
       position: 'relative',
       overflow: 'hidden',
       width: '0.6em',
-      height: '1.15em',
+      height: '1em',
       verticalAlign: 'middle',
-      WebkitMaskImage: 'linear-gradient(to bottom, transparent 0%, black 28%, black 72%, transparent 100%)',
-      maskImage: 'linear-gradient(to bottom, transparent 0%, black 28%, black 72%, transparent 100%)',
+      WebkitMaskImage: `linear-gradient(to bottom, rgba(0,0,0,${1 - clarity}) 0%, black 28%, black 72%, rgba(0,0,0,${1 - clarity}) 100%)`,
+      maskImage: `linear-gradient(to bottom, rgba(0,0,0,${1 - clarity}) 0%, black 28%, black 72%, rgba(0,0,0,${1 - clarity}) 100%)`,
     }}>
       <AnimatePresence mode="popLayout" initial={false} custom={direction}>
         <motion.span
@@ -33,10 +33,10 @@ function DialDigit({ char, direction, clarity }) {
           transition={{ duration, ease: [0.25, 0.1, 0.25, 1] }}
           style={{
             position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            textAlign: 'center',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           {char}
