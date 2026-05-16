@@ -92,6 +92,15 @@ export function usePlayerState() {
     seek(t)
   }, [seek])
 
+  const replay = useCallback(() => {
+    currentTimeRef.current = 0
+    setCurrentTime(0)
+    isPlayingRef.current = true
+    lastTimestampRef.current = null
+    setIsPlaying(true)
+    rafRef.current = requestAnimationFrame(tick)
+  }, [tick])
+
   return {
     isPlaying,
     currentTime,
@@ -106,5 +115,6 @@ export function usePlayerState() {
     startScrub,
     updateScrub,
     endScrub,
+    replay,
   }
 }

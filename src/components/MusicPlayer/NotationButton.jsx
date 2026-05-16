@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { PencilNotationIcon } from './SFSymbol'
+import { PencilNotationIcon } from '../../assets/icons/SFSymbol'
 
 export function NotationButton({ onNotate }) {
   return (

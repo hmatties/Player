@@ -15,10 +15,13 @@ export function MusicPlayer({ onNotate }) {
     rotation,
     play,
     pause,
+    replay,
     startScrub,
     updateScrub,
     endScrub,
   } = usePlayerState()
+
+  const isEnded = currentTime >= duration
 
   return (
     <div style={{
@@ -74,8 +77,9 @@ export function MusicPlayer({ onNotate }) {
         </AnimatePresence>
         <PlayPauseButton
           isPlaying={isPlaying}
+          isEnded={isEnded}
           rotation={rotation}
-          onToggle={isPlaying ? pause : play}
+          onToggle={isEnded ? replay : isPlaying ? pause : play}
         />
 
         <div style={{ flex: 1, minWidth: 0, padding: '0 8px', overflow: 'visible', position: 'relative' }}>

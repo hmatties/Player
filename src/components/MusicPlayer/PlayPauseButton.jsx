@@ -1,7 +1,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { PlayFillIcon, PauseIcon } from './SFSymbol'
+import { PlayFillIcon, PauseIcon, ReplayIcon } from '../../assets/icons/SFSymbol'
 
-export function PlayPauseButton({ isPlaying, rotation, onToggle }) {
+export function PlayPauseButton({ isPlaying, isEnded, rotation, onToggle }) {
   return (
     <div
       style={{
@@ -40,16 +40,18 @@ export function PlayPauseButton({ isPlaying, rotation, onToggle }) {
       >
         <AnimatePresence mode="wait">
           <motion.div
-            key={isPlaying ? 'pause' : 'play'}
+            key={isEnded ? 'replay' : isPlaying ? 'pause' : 'play'}
             initial={{ opacity: 0, scale: 0.7 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.7 }}
             transition={{ duration: 0.12 }}
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', lineHeight: 0 }}
           >
-            {isPlaying
-              ? <PauseIcon size={16} />
-              : <div style={{ transform: 'translateX(1.5px)' }}><PlayFillIcon size={16} /></div>
+            {isEnded
+              ? <ReplayIcon size={20} />
+              : isPlaying
+                ? <PauseIcon size={16} />
+                : <div style={{ transform: 'translateX(1.5px)' }}><PlayFillIcon size={16} /></div>
             }
           </motion.div>
         </AnimatePresence>
