@@ -1,13 +1,14 @@
 import { motion } from 'framer-motion'
 import { PencilNotationIcon } from '../../assets/icons/SFSymbol'
 
-export function NotationButton({ onNotate }) {
+export function NotationButton({ onNotateStart, onNotateEnd }) {
   return (
     <motion.button
       whileHover={{ scale: 1.06 }}
       whileTap={{ scale: 0.92 }}
       transition={{ type: 'spring', stiffness: 400, damping: 22 }}
-      onClick={onNotate}
+      onPointerDown={(e) => { e.preventDefault(); onNotateStart?.() }}
+      onPointerUp={() => onNotateEnd?.()}
       style={{
         width: 52,
         height: 52,

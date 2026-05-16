@@ -1,26 +1,14 @@
 import { motion, AnimatePresence } from 'framer-motion'
-import { usePlayerState } from '../../hooks/usePlayerState'
 import { PlayPauseButton } from './PlayPauseButton'
 import { Waveform } from './Waveform'
 import { NotationButton } from './NotationButton'
 import { ScrubTimestamp } from './ScrubTimestamp'
 
-export function MusicPlayer({ onNotate }) {
-  const {
-    isPlaying,
-    currentTime,
-    duration,
-    isScrubbing,
-    scrubTime,
-    rotation,
-    play,
-    pause,
-    replay,
-    startScrub,
-    updateScrub,
-    endScrub,
-  } = usePlayerState()
-
+export function MusicPlayer({
+  isPlaying, currentTime, duration, isScrubbing, scrubTime, rotation,
+  play, pause, replay, seek, startScrub, updateScrub, endScrub,
+  onNotateStart, onNotateEnd,
+}) {
   const isEnded = currentTime >= duration
 
   return (
@@ -33,7 +21,6 @@ export function MusicPlayer({ onNotate }) {
       zIndex: 100,
       overflow: 'visible',
     }}>
-      {/* Tooltip peeks from behind the top edge of the pill */}
       <ScrubTimestamp
         isScrubbing={isScrubbing}
         scrubTime={scrubTime}
@@ -56,7 +43,6 @@ export function MusicPlayer({ onNotate }) {
         position: 'relative',
         zIndex: 2,
       }}>
-        {/* Scrub brightness overlay */}
         <AnimatePresence>
           {isScrubbing && (
             <motion.div
@@ -94,7 +80,7 @@ export function MusicPlayer({ onNotate }) {
           />
         </div>
 
-        <NotationButton onNotate={onNotate ?? (() => {})} />
+        <NotationButton onNotateStart={onNotateStart} onNotateEnd={onNotateEnd} />
       </div>
     </div>
   )
