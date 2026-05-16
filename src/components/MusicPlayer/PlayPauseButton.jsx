@@ -48,8 +48,8 @@ export function PlayPauseButton({ isPlaying, rotation, onToggle }) {
             style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', lineHeight: 0 }}
           >
             {isPlaying
-              ? <PauseIcon size={18} />
-              : <div style={{ transform: 'translateX(1.5px)' }}><PlayFillIcon size={18} /></div>
+              ? <PauseIcon size={16} />
+              : <div style={{ transform: 'translateX(1.5px)' }}><PlayFillIcon size={16} /></div>
             }
           </motion.div>
         </AnimatePresence>

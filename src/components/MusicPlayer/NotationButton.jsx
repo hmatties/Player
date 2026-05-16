@@ -25,7 +25,7 @@ export function NotationButton({ onNotate }) {
       }}
     >
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', lineHeight: 0 }}>
-        <PencilNotationIcon size={26} />
+        <PencilNotationIcon size={32} />
       </div>
     </motion.button>
   )
