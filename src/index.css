@@ -13,4 +13,9 @@
 
 body {
   background: #1E1E1E;
+  cursor: none;
+}
+
+* {
+  cursor: none !important;
 }
